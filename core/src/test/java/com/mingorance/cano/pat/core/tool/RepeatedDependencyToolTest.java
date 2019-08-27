@@ -1,12 +1,12 @@
 package com.mingorance.cano.pat.core.tool;
 
+import java.util.List;
+
 import com.mingorance.cano.pat.core.service.PomService;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.util.List;
 
 public class RepeatedDependencyToolTest {
 

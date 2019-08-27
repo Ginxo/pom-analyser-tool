@@ -1,11 +1,11 @@
 package com.mingorance.cano.pat.core.service;
 
+import java.util.List;
+
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.util.List;
 
 public class PomServiceTest {
 

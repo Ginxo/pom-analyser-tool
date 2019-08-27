@@ -1,11 +1,11 @@
 package com.mingorance.cano.pat.core.entity;
 
+import java.lang.reflect.InvocationTargetException;
+
 import lombok.Getter;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
-
-import java.lang.reflect.InvocationTargetException;
 
 @Getter
 public class PatDependency extends Dependency {

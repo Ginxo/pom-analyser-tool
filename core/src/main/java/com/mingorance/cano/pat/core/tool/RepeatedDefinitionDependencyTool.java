@@ -1,19 +1,15 @@
 package com.mingorance.cano.pat.core.tool;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import com.mingorance.cano.pat.core.entity.PatDependency;
 import com.mingorance.cano.pat.core.service.PomService;
 import com.mingorance.cano.pat.core.util.DependencyUtil;
 import org.apache.maven.model.Dependency;
-import org.apache.maven.model.DependencyManagement;
 import org.apache.maven.model.Model;
-import org.codehaus.plexus.util.CollectionUtils;
-
-import javax.swing.text.html.Option;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class RepeatedDefinitionDependencyTool {
 
@@ -27,6 +23,10 @@ public class RepeatedDefinitionDependencyTool {
             instance = new RepeatedDefinitionDependencyTool();
         }
         return instance;
+    }
+
+    public List<PatDependency> run(final String pomFilePath) {
+        return this.run(PomService.getInstance().readPom(pomFilePath));
     }
 
     public List<PatDependency> run(final Model model) {
@@ -85,6 +85,5 @@ public class RepeatedDefinitionDependencyTool {
             }
             this.check_parent(parent, repeatedDependencies);
         }
-
     }
 }

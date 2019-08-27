@@ -1,11 +1,12 @@
 package com.mingorance.cano.pat.core.tool;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.mingorance.cano.pat.core.service.PomService;
 import com.mingorance.cano.pat.core.util.DependencyUtil;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class RepeatedDependencyTool {
 
@@ -21,6 +22,10 @@ public class RepeatedDependencyTool {
         return instance;
     }
 
+    public List<Dependency> run(final String pomFilePath) {
+        return this.run(PomService.getInstance().readPom(pomFilePath));
+    }
+
     public List<Dependency> run(final Model model) {
         final List<Dependency> repeatedDependencies = new ArrayList<>();
         for (int i = 0; i < model.getDependencies().size(); i++) {
@@ -29,7 +34,6 @@ public class RepeatedDependencyTool {
                     repeatedDependencies.add(model.getDependencies().get(i));
                 }
             }
-
         }
         return repeatedDependencies;
     }

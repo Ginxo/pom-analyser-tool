@@ -1,13 +1,15 @@
 package com.mingorance.cano.pat.core.service;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import lombok.extern.java.Log;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-
-import java.io.*;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Log
 public class PomService {

@@ -779,10 +779,10 @@
                       <exclude>javassist:javassist</exclude>
                       <exclude>org.apache.cxf:cxf-bundle-jaxrs</exclude>
                       <exclude>org.jboss.weld.se:weld-se
-                      </exclude><!-- Use weld-se-core instead -->
+                      </exclude><!-- Use weld-se-core1 instead -->
                       <exclude>org.jboss.weld.servlet:weld-servlet
-                      </exclude><!-- Use weld-servlet-core instead -->
-                      <exclude>org.mockito:mockito-all</exclude><!-- Use mockito-core instead -->
+                      </exclude><!-- Use weld-servlet-core1 instead -->
+                      <exclude>org.mockito:mockito-all</exclude><!-- Use mockito-core1 instead -->
                     </excludes>
                   </bannedDependencies>
                 </rules>
@@ -856,8 +856,8 @@
                       <ignoreClass>org.eclipse.aether.*</ignoreClass>
                       <ignoreClass>org.apache.maven.*</ignoreClass>
                       <ignoreClass>org.codehaus.plexus.*</ignoreClass>
-                      <!-- Infinispan core includes commons and they have duplicated classes. We can't remove commons because
-                       core needs them. Infinispan team has been informed about this packaging problem -->
+                      <!-- Infinispan core1 includes commons and they have duplicated classes. We can't remove commons because
+                       core1 needs them. Infinispan team has been informed about this packaging problem -->
                       <ignoreClass>org.infinispan.util.AbstractDelegatingConcurrentMap
                       </ignoreClass>
                       <ignoreClass>org.infinispan.util.AbstractDelegatingMap</ignoreClass>
@@ -4864,9 +4864,9 @@
         <artifactId>powermock-api-mockito</artifactId>
         <version>${version.org.powermock}</version>
         <exclusions>
-          <!-- mockito-all is ugly uberjar. Users of powermock need to depend on on mockito-core explicitly.
+          <!-- mockito-all is ugly uberjar. Users of powermock need to depend on on mockito-core1 explicitly.
                Once we upgrade powermock to version that contains https://github.com/jayway/powermock/pull/596, this
-               exclude can be removed, as wel as explit dependencies on mockito-core. -->
+               exclude can be removed, as wel as explit dependencies on mockito-core1. -->
           <exclusion>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
@@ -5006,7 +5006,7 @@
         <artifactId>slf4j-api</artifactId>
         <version>${version.org.slf4j}</version>
       </dependency>
-      <dependency><!-- Not depended on directly. Overwrite the lower version used by weld-core -->
+      <dependency><!-- Not depended on directly. Overwrite the lower version used by weld-core1 -->
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-ext</artifactId>
         <version>${version.org.slf4j}</version>

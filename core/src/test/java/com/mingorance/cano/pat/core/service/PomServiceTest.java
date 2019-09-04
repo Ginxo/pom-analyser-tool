@@ -24,21 +24,21 @@ public class PomServiceTest {
         final Model model = PomService.getInstance().readPom(this.getClass().getClassLoader().getResource("project1/pom.xml").getPath());
 
         // Act
-        final List<Model> modules = PomService.getInstance().loadModules(model);
+        final List<Model> modules = PomService.getInstance().loadModuleModels(model);
 
         // Assert
         Assert.assertEquals("parent", model.getArtifactId());
-        Assert.assertEquals(1, modules.size());
-        Assert.assertEquals("core", modules.get(0).getArtifactId());
+        Assert.assertEquals(2, modules.size());
+        Assert.assertEquals("core1", modules.get(0).getArtifactId());
         Assert.assertEquals("../pom.xml", modules.get(0).getParent().getRelativePath());
     }
-
 
     @Test
     public void test_loadParent() {
         // Arrange
         final Model model = PomService.getInstance().readPom(this.getClass().getClassLoader().getResource("project1/pom.xml").getPath());
-        final List<Model> modules = PomService.getInstance().loadModules(model);
+        final List<Model> modules = PomService.getInstance().loadModuleModels(model);
+        ;
         final Model child = modules.get(0);
 
         // Act
@@ -50,7 +50,7 @@ public class PomServiceTest {
     @Test
     public void test_check_dependency_with_version() {
         // Arrange
-        final Model model = PomService.getInstance().readPom(this.getClass().getClassLoader().getResource("project1/core/pom.xml").getPath());
+        final Model model = PomService.getInstance().readPom(this.getClass().getClassLoader().getResource("project1/core1/pom.xml").getPath());
         final List<Dependency> dependencies = model.getDependencies();
 
         // Act
@@ -63,7 +63,7 @@ public class PomServiceTest {
     @Test
     public void test_check_dependency_without_version() {
         // Arrange
-        final Model model = PomService.getInstance().readPom(this.getClass().getClassLoader().getResource("project1/core/pom.xml").getPath());
+        final Model model = PomService.getInstance().readPom(this.getClass().getClassLoader().getResource("project1/core1/pom.xml").getPath());
         final List<Dependency> dependencies = model.getDependencies();
 
         // Act
@@ -76,7 +76,7 @@ public class PomServiceTest {
     @Test
     public void test_check_dependency_with_classifier() {
         // Arrange
-        final Model model = PomService.getInstance().readPom(this.getClass().getClassLoader().getResource("project1/core/pom.xml").getPath());
+        final Model model = PomService.getInstance().readPom(this.getClass().getClassLoader().getResource("project1/core1/pom.xml").getPath());
         final List<Dependency> dependencies = model.getDependencies();
 
         // Act
@@ -89,7 +89,7 @@ public class PomServiceTest {
     @Test
     public void test_check_dependency_without_classifier() {
         // Arrange
-        final Model model = PomService.getInstance().readPom(this.getClass().getClassLoader().getResource("project1/core/pom.xml").getPath());
+        final Model model = PomService.getInstance().readPom(this.getClass().getClassLoader().getResource("project1/core1/pom.xml").getPath());
         final List<Dependency> dependencies = model.getDependencies();
 
         // Act

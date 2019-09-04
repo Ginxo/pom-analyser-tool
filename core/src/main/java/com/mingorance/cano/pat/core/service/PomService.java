@@ -29,10 +29,14 @@ public class PomService {
     }
 
     public Model readPom(final String pomFilePath) {
-        return readPom(new File(pomFilePath), null);
+        return this.readPom(new File(pomFilePath));
     }
 
-    public List<Model> loadModules(final Model model) {
+    public Model readPom(final File pomFile) {
+        return readPom(pomFile, null);
+    }
+
+    public List<Model> loadModuleModels(final Model model) {
         return model.getModules()
                 .stream()
                 .map(module -> this.readPom(new File(String.format("%s/%s/pom.xml", model.getPomFile().getParentFile().getAbsolutePath(), module)), String.format("../%s", model.getPomFile().getName())))

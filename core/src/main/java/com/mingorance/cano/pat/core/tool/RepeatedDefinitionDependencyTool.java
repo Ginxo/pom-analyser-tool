@@ -64,7 +64,7 @@ public class RepeatedDefinitionDependencyTool {
     }
 
     private void check_children(final List<Dependency> dependencyManagementDependencies, final Model model, final List<PatDependency> repeatedDependencies) {
-        PomService.getInstance().loadModules(model).forEach(child -> {
+        PomService.getInstance().loadModuleModels(model).forEach(child -> {
             this.run(model, dependencyManagementDependencies, child, child.getDependencies(), repeatedDependencies);
             if (child.getDependencyManagement() != null) {
                 this.run(model, model.getDependencyManagement().getDependencies(), child, child.getDependencyManagement().getDependencies(), repeatedDependencies);

@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.drools</groupId>
+    <artifactId>droolsjbpm-tools</artifactId>
+    <version>7.26.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>drools-eclipse</artifactId>
+  <packaging>pom</packaging>
+  
+  <name>Drools, jBPM and Guvnor plugins for Eclipse</name>
+  <description>
+    To use these Eclipse plugins in production, use the download site linked on:
+    http://www.jboss.org/drools/downloads
+    
+    To use these Eclipse plugins locally during development,
+    see the pom description of the module org.drools.updatesite.
+  </description>
+  
+  <properties>
+    <!-- disabling javadoc as it seems to interfere with source generation:
+         http://dev.eclipse.org/mhonarc/lists/tycho-user/msg04453.html -->
+    <maven.javadoc.skip>true</maven.javadoc.skip>
+    <!-- There are duplicated classes between the standard and 'p2.eclipse-plugin:*' dependencies. There is no
+         easy way to fix this other than introduce complex configs. -->
+    <enforcer.failOnDuplicatedClasses>false</enforcer.failOnDuplicatedClasses>
+    <BUILD_ALIAS>Final</BUILD_ALIAS>
+  </properties>
+
+  <modules>
+    <module>org.drools.eclipse</module>
+    <module>org.drools.eclipse.feature</module>
+    <module>org.drools.eclipse.test</module>
+    <module>org.guvnor.eclipse.webdav</module>
+    <module>org.guvnor.tools</module>
+    <module>org.guvnor.tools.feature</module>
+    <module>org.guvnor.tools.test</module> 
+    <module>org.jbpm.eclipse</module>
+    <module>org.jbpm.eclipse.feature</module>
+    <module>org.kie.eclipse</module>
+    <module>org.kie.eclipse.feature</module>
+    <module>org.kie.eclipse.navigator</module>
+    <module>org.kie.eclipse.navigator.feature</module>
+    <module>org.jboss.tools.runtime.drools.detector</module>
+    <module>org.jboss.tools.runtime.drools.detector.feature</module>
+    <module>org.drools.updatesite</module>
+  </modules>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <executions>
+          <!-- Does not work properly together with the tycho-plugin -->
+          <execution>
+            <id>enforce-plugin-versions</id>
+            <phase>none</phase>
+          </execution>
+          <!-- Does not work properly together with the tycho-plugin -->
+          <execution>
+            <id>ban-uberjars</id>
+            <phase>none</phase>
+          </execution>
+          <!-- Does not work properly together with the tycho-plugin -->
+          <execution>
+            <id>ban-blacklisted-dependencies</id>
+            <phase>none</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-maven-plugin</artifactId>
+        <extensions>true</extensions>
+      </plugin>
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>target-platform-configuration</artifactId>
+        <configuration>
+        <resolver>p2</resolver>
+        <ignoreTychoRepositories>true</ignoreTychoRepositories>
+        <environments>
+          <environment>
+            <os>macosx</os>
+            <ws>cocoa</ws>
+            <arch>x86_64</arch>
+          </environment>
+          <environment>
+            <os>win32</os>
+            <ws>win32</ws>
+            <arch>x86</arch>
+          </environment>
+          <environment>
+            <os>win32</os>
+            <ws>win32</ws>
+            <arch>x86_64</arch>
+          </environment>
+          <environment>
+            <os>linux</os>
+            <ws>gtk</ws>
+            <arch>x86</arch>
+          </environment>
+          <environment>
+            <os>linux</os>
+            <ws>gtk</ws>
+            <arch>x86_64</arch>
+          </environment>
+        </environments>
+
+         <!-- Pick up the merged target dependencies of the JBoss Tools core1 unified target and the full
+              JBoss Tools Integration Stack (with community). -->
+        <target>
+          <artifact>
+            <groupId>org.jboss.tools.integration-stack</groupId>
+            <artifactId>target-platform</artifactId>
+            <version>4.5.1.Final</version>
+            <type>target</type>
+            <classifier>base</classifier>
+          </artifact>
+        </target>
+       </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-surefire-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-packaging-plugin</artifactId>
+        <configuration>
+          <format>'${BUILD_ALIAS}-v'yyyyMMdd-HHmm'-B${BUILD_NUMBER}'</format>
+          <archiveSite>true</archiveSite>
+          <environments>
+            <environment>
+              <os>macosx</os>
+              <ws>cocoa</ws>
+              <arch>x86_64</arch>
+            </environment>
+            <environment>
+              <os>win32</os>
+              <ws>win32</ws>
+              <arch>x86</arch>
+            </environment>
+            <environment>
+              <os>win32</os>
+              <ws>win32</ws>
+              <arch>x86_64</arch>
+            </environment>
+            <environment>
+              <os>linux</os>
+              <ws>gtk</ws>
+              <arch>x86</arch>
+            </environment>
+            <environment>
+              <os>linux</os>
+              <ws>gtk</ws>
+              <arch>x86_64</arch>
+            </environment>
+          </environments>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-source-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>plugin-source</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-versions-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.eclipse.tycho.extras</groupId>
+        <artifactId>tycho-source-feature-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>source-feature</id>
+            <phase>package</phase>
+            <goals>
+              <goal>source-feature</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+<version>7.26.0-SNAPSHOT</version>
+</project>

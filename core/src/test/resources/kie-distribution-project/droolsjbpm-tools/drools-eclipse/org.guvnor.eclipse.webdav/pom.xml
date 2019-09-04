@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <parent>
+    <groupId>org.drools</groupId>
+    <artifactId>drools-eclipse</artifactId>
+    <version>7.26.0-SNAPSHOT</version>
+  </parent>
+
+  <modelVersion>4.0.0</modelVersion>
+  <!-- Forked from org.eclipse.webdav -->
+  <artifactId>org.guvnor.eclipse.webdav</artifactId>
+  <packaging>eclipse-plugin</packaging>
+
+  <name>Drools :: Eclipse :: Webdav for Guvnor tools</name>
+  <description>
+    We build this plugin because eclipse no longer distributes it and Guvnor tools needs it.
+  </description>
+  
+  <licenses>
+    <license>
+      <name>Eclipse Public License v1.0</name>
+      <url>http://www.eclipse.org/legal/epl-v10.html</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+</project>

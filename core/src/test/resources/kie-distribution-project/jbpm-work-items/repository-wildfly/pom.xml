@@ -1,0 +1,247 @@
+<?xml version="1.0"?>
+<project
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+    xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.jbpm.contrib</groupId>
+    <artifactId>workitems</artifactId>
+    <version>7.26.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>repository-wildfly</artifactId>
+  <packaging>war</packaging>
+  <name>Repository WildFly</name>
+  <description>Workitems WildFly Repository</description>
+  <organization>
+    <name>jBPM dev team</name>
+  </organization>
+
+  <properties>
+    <version.org.wildfly>11.0.0.Final</version.org.wildfly>
+  </properties>
+
+  <dependencies>
+
+    <!-- module dependencies -->
+    <dependency>
+      <groupId>org.jbpm.contrib</groupId>
+      <artifactId>repository</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.enterprise</groupId>
+      <artifactId>cdi-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jboss.spec.javax.annotation</groupId>
+      <artifactId>jboss-annotations-api_1.2_spec</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jboss.spec.javax.ws.rs</groupId>
+      <artifactId>jboss-jaxrs-api_2.1_spec</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jboss.resteasy</groupId>
+      <artifactId>resteasy-jackson-provider</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.codehaus.jackson</groupId>
+      <artifactId>jackson-mapper-asl</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.codehaus.jackson</groupId>
+      <artifactId>jackson-core-asl</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.jaxrs</groupId>
+      <artifactId>jackson-jaxrs-json-provider</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.jaxrs</groupId>
+      <artifactId>jackson-jaxrs-base</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-repository-resources</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <encoding>UTF-8</encoding>
+              <resources>
+                <resource>
+                  <directory>../repository/target/repository-${project.version}</directory>
+                  <includes>
+                    <include>**/*.json</include>
+                    <include>**/*.wid</include>
+                    <include>**/*.html</include>
+                    <include>**/*.conf</include>
+                    <include>**/*.xml</include>
+                    <include>**/*.jar</include>
+                    <include>**/*.png</include>
+                    <include>**/*.js</include>
+                    <include>**/*.bpmn2</include>
+                  </includes>
+                  <filtering>false</filtering>
+                </resource>
+              </resources>
+              <outputDirectory>target/repository</outputDirectory>
+            </configuration>
+          </execution>
+          <execution>
+            <id>copy-indexconf-resources</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <encoding>UTF-8</encoding>
+              <resources>
+                <resource>
+                  <directory>../repository/target/repository-${project.version}</directory>
+                  <includes>
+                    <include>serviceinfo.js</include>
+                  </includes>
+                  <filtering>false</filtering>
+                </resource>
+              </resources>
+              <outputDirectory>target/classes</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.wildfly.plugins</groupId>
+        <artifactId>wildfly-maven-plugin</artifactId>
+        <version>${version.wildfly.maven.plugin}</version>
+      </plugin>
+      <plugin>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>${version.war.plugin}</version>
+        <configuration>
+          <!--<packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>-->
+          <packagingExcludes>%regex[WEB-INF/lib/(?!(repository-${project.version}\.jar|commons-io-${version.apache.commons.io}\.jar)).*]</packagingExcludes>
+          <failOnMissingWebXml>false</failOnMissingWebXml>
+          <webResources>
+            <resource>
+              <directory>target/repository</directory>
+              <filtering>false</filtering>
+            </resource>
+          </webResources>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unpack</id>
+            <phase>process-test-classes</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.wildfly</groupId>
+                  <artifactId>wildfly-dist</artifactId>
+                  <version>${version.org.wildfly}</version>
+                  <type>zip</type>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>target</outputDirectory>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <finalName>repository-server-${project.version}</finalName>
+          <descriptors>
+            <descriptor>src/main/assembly/assembly-server-dist.xml</descriptor>
+          </descriptors>
+        </configuration>
+      </plugin>
+    </plugins>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-enforcer-plugin</artifactId>
+          <executions>
+            <execution>
+              <id>ban-duplicated-classes</id>
+              <phase>validate</phase>
+              <goals>
+                <goal>enforce</goal>
+              </goals>
+              <configuration>
+                <rules>
+                  <banDuplicateClasses>
+                    <ignoreClasses combine.children="append">
+                      <ignoreClass>com.google.common.*</ignoreClass>
+                      <ignoreClass>com.google.thirdparty.*</ignoreClass>
+                      <ignoreClass>javax.xml.*</ignoreClass>
+                      <ignoreClass>javax.xml.stream.*</ignoreClass>
+                      <ignoreClass>javax.xml.namespace.*</ignoreClass>
+                      <ignoreClass>javax.ws.rs.*</ignoreClass>
+                      <ignoreClass>javax.el.*</ignoreClass>
+                      <ignoreClass>org.aopalliance.*</ignoreClass>
+                    </ignoreClasses>
+                  </banDuplicateClasses>
+                </rules>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+</project>

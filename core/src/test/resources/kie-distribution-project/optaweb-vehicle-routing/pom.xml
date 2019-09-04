@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2019 Red Hat, Inc. and/or its affiliates.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.kie</groupId>
+    <artifactId>kie-parent</artifactId>
+    <version>7.26.0-SNAPSHOT</version>
+  </parent>
+
+  <groupId>org.optaweb.vehiclerouting</groupId>
+  <artifactId>optaweb-vehicle-routing</artifactId>
+  <packaging>pom</packaging>
+
+  <name>OptaWeb Vehicle Routing</name>
+
+  <modules>
+    <module>optaweb-vehicle-routing-backend</module>
+    <module>optaweb-vehicle-routing-frontend</module>
+  </modules>
+
+  <properties>
+    <version.javax.validation>2.0.1.Final</version.javax.validation>
+    <version.org.assertj>3.11.1</version.org.assertj>
+    <version.org.mockito>2.23.4</version.org.mockito>
+    <version.org.junit>5.4.2</version.org.junit>
+    <version.org.springframework>5.1.7.RELEASE</version.org.springframework>
+    <version.org.springframework.boot>2.1.5.RELEASE</version.org.springframework.boot>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <!-- Temporarily override Spring Boot's Junit version to get access to @TempDir -->
+      <dependency>
+        <groupId>org.junit</groupId>
+        <artifactId>junit-bom</artifactId>
+        <version>${version.org.junit}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>${version.org.springframework.boot}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.optaplanner</groupId>
+        <artifactId>optaplanner-examples</artifactId>
+        <version>${version.org.optaplanner}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.jboss.spec.javax.xml.bind</groupId>
+            <artifactId>jboss-jaxb-api_2.3_spec</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>javax.activation</groupId>
+            <artifactId>activation</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>2.9.9.1</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.dataformat</groupId>
+        <artifactId>jackson-dataformat-yaml</artifactId>
+        <version>2.9.9</version>
+      </dependency>
+      <dependency>
+        <groupId>com.graphhopper</groupId>
+        <artifactId>graphhopper-reader-osm</artifactId>
+        <version>0.13.0-pre13</version>
+      </dependency>
+      <dependency>
+        <groupId>com.neovisionaries</groupId>
+        <artifactId>nv-i18n</artifactId>
+        <version>1.24</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-maven-plugin</artifactId>
+          <version>${version.org.springframework.boot}</version>
+        </plugin>
+        <!-- Disable Jacoco check inherited from kie-parent. Remove this when it's removed from kie-parent (but some projects
+             still use the check fail build). -->
+        <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <executions>
+            <execution>
+              <id>default-check</id>
+              <goals>
+                <goal>check</goal>
+              </goals>
+              <phase>none</phase>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+  <profiles>
+    <profile>
+      <!-- Skip Sonar plugin execution if SONARCLOUD_TOKEN is not set. -->
+      <id>skipSonar</id>
+      <activation>
+        <property>
+          <name>!env.SONARCLOUD_TOKEN</name>
+        </property>
+      </activation>
+      <properties>
+        <sonar.skip>true</sonar.skip>
+      </properties>
+    </profile>
+    <profile>
+      <id>pullRequestAnalysis-Travis</id>
+      <!-- Only set sonar.pullrequest properties when the Travis build is triggered by a PR.
+           When the build is triggered by push to a branch or by cron, the consumed env.TRAVIS properties are empty,
+           resulting in invalid sonar.pullrequest properties and the Sonar plugin would fail. -->
+      <activation>
+        <property>
+          <name>env.TRAVIS_EVENT_TYPE</name>
+          <value>pull_request</value>
+        </property>
+      </activation>
+      <!-- See https://docs.travis-ci.com/user/environment-variables/ for list of Travis environment variables. -->
+      <!-- See https://docs.sonarqube.org/latest/analysis/pull-request/ for properties required by Sonar for PR analysis. -->
+      <properties>
+        <!--suppress UnresolvedMavenProperty -->
+        <sonar.pullrequest.branch>${env.TRAVIS_PULL_REQUEST_BRANCH}</sonar.pullrequest.branch>
+        <!--suppress UnresolvedMavenProperty -->
+        <sonar.pullrequest.key>${env.TRAVIS_PULL_REQUEST}</sonar.pullrequest.key>
+        <!--suppress UnresolvedMavenProperty -->
+        <sonar.pullrequest.base>${env.TRAVIS_BRANCH}</sonar.pullrequest.base>
+      </properties>
+    </profile>
+    <profile>
+      <id>branchAnalysis-Travis</id>
+      <activation>
+        <property>
+          <name>env.TRAVIS_EVENT_TYPE</name>
+          <value>!pull_request</value>
+        </property>
+      </activation>
+      <!-- See https://docs.travis-ci.com/user/environment-variables/ for list of Travis environment variables. -->
+      <!-- See https://docs.sonarqube.org/latest/branches/overview/ for properties required by Sonar for branch analysis. -->
+      <properties>
+        <!--suppress UnresolvedMavenProperty -->
+        <sonar.branch.name>${env.TRAVIS_BRANCH}</sonar.branch.name>
+      </properties>
+    </profile>
+  </profiles>
+
+  <repositories>
+    <!-- Bootstrap repository to locate the parent POM when it has not been built locally. -->
+    <repository>
+      <id>jboss-public-repository-group</id>
+      <name>JBoss Public Repository Group</name>
+      <url>https://repository.jboss.org/nexus/content/groups/public/</url>
+      <layout>default</layout>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>daily</updatePolicy>
+      </snapshots>
+    </repository>
+  </repositories>
+</project>

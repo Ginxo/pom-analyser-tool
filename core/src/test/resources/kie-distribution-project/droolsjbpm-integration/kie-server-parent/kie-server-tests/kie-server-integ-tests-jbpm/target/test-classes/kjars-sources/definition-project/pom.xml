@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.kie.server.testing</groupId>
+    <artifactId>common-parent</artifactId>
+    <version>1.0.0.Final</version>
+  </parent>
+
+  <artifactId>definition-project</artifactId>
+  <version>1.0.0.Final</version>
+  <name>definition-project</name>
+
+   <properties>    
+    <kie.api.path>/home/emingora/development/projects/RedHat/temp/droolsjbpm-integration/m2_temp/PNC_TEST/230819090152/org/kie/kie-api/7.26.0-SNAPSHOT/kie-api-7.26.0-SNAPSHOT.jar</kie.api.path>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.kie</groupId>
+      <artifactId>kie-api</artifactId>
+      <version>7.26.0-SNAPSHOT</version>
+      <scope>system</scope>
+      <systemPath>${kie.api.path}</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.spec.javax.xml.bind</groupId>
+      <artifactId>jboss-jaxb-api_2.3_spec</artifactId>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.kie</groupId>
+        <artifactId>kie-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+</project>

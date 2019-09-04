@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.kie.server.testing</groupId>
+    <artifactId>common-parent</artifactId>
+    <version>1.0.0.Final</version>
+  </parent>
+
+  <artifactId>query-definition-project</artifactId>
+  <version>1.0.0.Final</version>
+  <name>query-definition-project</name>
+
+  <properties>
+    <jbpm.services.api.path>/home/emingora/development/projects/RedHat/temp/droolsjbpm-integration/m2_temp/PNC_TEST/230819090152/org/jbpm/jbpm-services-api/7.26.0-SNAPSHOT/jbpm-services-api-7.26.0-SNAPSHOT.jar</jbpm.services.api.path>
+    <kie.soup.dataset.api.path>/home/emingora/development/projects/RedHat/temp/droolsjbpm-integration/m2_temp/PNC_TEST/230819090152/org/kie/soup/kie-soup-dataset-api/7.26.0-SNAPSHOT/kie-soup-dataset-api-7.26.0-SNAPSHOT.jar</kie.soup.dataset.api.path>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.jbpm</groupId>
+      <artifactId>jbpm-services-api</artifactId>
+      <version>7.26.0-SNAPSHOT</version>
+      <scope>system</scope>
+      <systemPath>${jbpm.services.api.path}</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.soup</groupId>
+      <artifactId>kie-soup-dataset-api</artifactId>
+      <version>7.26.0-SNAPSHOT</version>
+      <scope>system</scope>
+      <systemPath>${kie.soup.dataset.api.path}</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.spec.javax.xml.bind</groupId>
+      <artifactId>jboss-jaxb-api_2.3_spec</artifactId>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.kie</groupId>
+        <artifactId>kie-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+</project>

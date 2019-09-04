@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.drools</groupId>
+    <artifactId>drools-eclipse</artifactId>
+    <version>7.26.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>org.drools.eclipse</artifactId>
+  <packaging>eclipse-plugin</packaging>
+
+  <name>Drools :: Eclipse :: Base</name>
+  <description>Drools Eclipse plugin</description>
+
+  <properties>
+    <illegaltransitivereportonly>true</illegaltransitivereportonly>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <inherited>false</inherited>
+        <executions>
+          <execution>
+            <id>clean lib</id>
+            <phase>clean</phase>
+            <configuration>
+              <target>
+                <delete>
+                  <fileset dir="lib" includes="**/*.jar" excludes="**/.svn"/>
+                </delete>
+                <delete dir="help/shared"/>
+                <delete dir="help/eclipse"/>
+              </target>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-dependencies</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>lib</outputDirectory>
+              <overWriteReleases>true</overWriteReleases>
+              <overWriteSnapshots>true</overWriteSnapshots>
+              <overWriteIfNewer>true</overWriteIfNewer>
+              <!-- Files .project and .classpath are committed and should not contain version strings -->
+              <stripVersion>true</stripVersion>
+              <includeScope>test</includeScope>
+              <!-- Keep in sync with MANIFEST.MF's Bundle-ClassPath -->
+              <includeArtifactIds>
+                kie-api,
+                kie-internal,
+                kie-soup-maven-support,
+                drools-core,
+                drools-compiler,
+                guvnor-api,
+                droolsjbpm-ide-common,
+                drools-decisiontables,
+                junit,
+                drools-templates,
+                kie-soup-commons,
+                kie-soup-project-datamodel-api,
+                kie-soup-project-datamodel-commons,
+                mvel2,
+                jbpm-bpmn2,
+                antlr-runtime,
+                poi,
+                poi-ooxml,
+                xmlpull,
+                xpp3_min,
+                xstream,
+                jbpm-flow,
+                jbpm-flow-builder,
+                slf4j-api,
+                protobuf-java
+              </includeArtifactIds>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.kie</groupId>
+      <artifactId>kie-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.kie</groupId>
+      <artifactId>kie-internal</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.drools</groupId>
+      <artifactId>drools-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.drools</groupId>
+      <artifactId>drools-compiler</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.drools</groupId>
+      <artifactId>drools-decisiontables</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.drools</groupId>
+      <artifactId>drools-templates</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.soup</groupId>
+      <artifactId>kie-soup-commons</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.soup</groupId>
+      <artifactId>kie-soup-project-datamodel-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.soup</groupId>
+      <artifactId>kie-soup-project-datamodel-commons</artifactId>
+    </dependency>
+
+
+    <dependency>
+      <groupId>org.jbpm</groupId>
+      <artifactId>jbpm-flow</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jbpm</groupId>
+      <artifactId>jbpm-flow-builder</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jbpm</groupId>
+      <artifactId>jbpm-bpmn2</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.mvel</groupId>
+      <artifactId>mvel2</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.antlr</groupId>
+      <artifactId>antlr-runtime</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.thoughtworks.xstream</groupId>
+      <artifactId>xstream</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.protobuf</groupId>
+      <artifactId>protobuf-java</artifactId>
+    </dependency>
+  </dependencies>
+
+</project>

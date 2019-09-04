@@ -1,0 +1,250 @@
+<?xml version="1.0"?>
+<project
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+    xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.jbpm.contrib</groupId>
+    <artifactId>workitems</artifactId>
+    <version>7.26.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>repository-springboot</artifactId>
+  <name>Repository SpringBoot</name>
+  <description>Workitems SpringBoot Repository</description>
+  <organization>
+    <name>jBPM dev team</name>
+  </organization>
+
+  <properties>
+    <version.org.springboot>1.5.10.RELEASE</version.org.springboot>
+    <heroku.appName>${project.artifactId}</heroku.appName>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <!-- Import dependency management from Spring Boot -->
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>${version.org.springboot}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+
+    <!-- module dependencies -->
+    <dependency>
+      <groupId>org.jbpm.contrib</groupId>
+      <artifactId>repository</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-autoconfigure</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-hateoas</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.hateoas</groupId>
+      <artifactId>spring-hateoas</artifactId>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.ow2.asm</groupId>
+          <artifactId>asm</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-beans</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-web</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-core</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-repository-resources</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <encoding>UTF-8</encoding>
+              <resources>
+                <resource>
+                  <directory>../repository/target/repository-${project.version}</directory>
+                  <includes>
+                    <include>**/*.json</include>
+                    <include>**/*.wid</include>
+                    <include>**/*.html</include>
+                    <include>**/*.conf</include>
+                    <include>**/*.xml</include>
+                    <include>**/*.jar</include>
+                    <include>**/*.png</include>
+                    <include>**/*.js</include>
+                    <include>**/*.bpmn2</include>
+                  </includes>
+                  <filtering>false</filtering>
+                </resource>
+              </resources>
+              <outputDirectory>target/classes/static</outputDirectory>
+            </configuration>
+          </execution>
+          <execution>
+            <id>copy-indexconf-resources</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <encoding>UTF-8</encoding>
+              <resources>
+                <resource>
+                  <directory>../repository/target/repository-${project.version}</directory>
+                  <includes>
+                    <include>serviceinfo.js</include>
+                  </includes>
+                  <filtering>false</filtering>
+                </resource>
+              </resources>
+              <outputDirectory>target/classes</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>${version.org.springboot}</version>
+        <configuration>
+          <mainClass>org.jbpm.process.workitem.repositoryspringboot.RepositorySpringBootApplication</mainClass>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>repackage</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.heroku.sdk</groupId>
+        <artifactId>heroku-maven-plugin</artifactId>
+        <version>2.0.3</version>
+        <configuration>
+          <appName>${heroku.appName}</appName>
+          <includeTarget>false</includeTarget>
+          <includes>
+            <include>${project.build.directory}/${project.build.finalName}.jar</include>
+          </includes>
+          <jdkVersion>${java.version}</jdkVersion>
+          <processTypes>
+            <web>java $JAVA_OPTS -jar target/${project.build.finalName}.jar</web>
+          </processTypes>
+        </configuration>
+      </plugin>
+    </plugins>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-enforcer-plugin</artifactId>
+          <executions>
+            <execution>
+              <id>ban-duplicated-classes</id>
+              <phase>validate</phase>
+              <goals>
+                <goal>enforce</goal>
+              </goals>
+              <configuration>
+                <rules>
+                  <banDuplicateClasses>
+                    <ignoreClasses combine.children="append">
+                      <ignoreClass>com.google.common.*</ignoreClass>
+                      <ignoreClass>com.google.thirdparty.*</ignoreClass>
+                      <ignoreClass>javax.xml.*</ignoreClass>
+                      <ignoreClass>javax.xml.stream.*</ignoreClass>
+                      <ignoreClass>javax.xml.namespace.*</ignoreClass>
+                      <ignoreClass>javax.ws.rs.*</ignoreClass>
+                      <ignoreClass>javax.el.*</ignoreClass>
+                      <ignoreClass>org.aopalliance.*</ignoreClass>
+                    </ignoreClasses>
+                  </banDuplicateClasses>
+                </rules>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+</project>
